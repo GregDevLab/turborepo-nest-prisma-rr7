@@ -1,84 +1,90 @@
-# Turborepo starter
+- [Français](#fr)
+- [English](#en)
 
-This Turborepo starter is maintained by the Turborepo core team.
+## <a id="fr">FRANCAIS</a>
 
-## Using this example
+# Problématique de partage d'une instance Prisma dans un monorepo Turbo (NestJS + Remix)
 
-Run the following command:
+## Contexte
 
-```sh
-npx create-turbo@latest
-```
+J'ai un monorepo TurboRepos avec la structure suivante :
 
-## What's inside?
+- **apps/**
+  - **nestjs** : Application backend basée sur NestJS (CommonJS)
+  - **remix** : Application frontend basée sur Remix (ESM)
+- **packages/**
+  - **db** : Package dédié à Prisma
 
-This Turborepo includes the following packages/apps:
+L'objectif est de centraliser la gestion du schéma Prisma et de partager une seule instance de `PrismaClient` entre ces deux applications, malgré leurs systèmes de modules différents (CommonJS vs. ESM).
 
-### Apps and Packages
+## Problématique
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+Lors de l'intégration du package `@repo/db` dans l'app NestJS, j'obtiens l'erreur suivante :
 
 ```
-cd my-turborepo
-pnpm build
+┌ nest#build > cache miss, executing fe4d766427a3979b
+│
+│
+│ > nest@0.0.1 build /home/anonyme/project/turbo/apps/nest
+│ > nest build
+│
+│ src/main.ts:2:24 - error TS2307: Cannot find module '@repo/db' or its corresponding type declarations.
+│   There are types at '/home/anonyme/project/turbo/apps/nest/node_modules/@repo/db/src/index.ts', but this result could not be resolved
+│  under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+│
+│ 2 import { prisma } from '@repo/db';
+│                          ~~~~~~~~~~
+│
+│ Found 1 error(s).
+│
+│  ELIFECYCLE  Command failed with exit code 1.
+│ command finished with error: command (/home/anonyme/project/turbo/apps/nest) /home/anonyme/.nvm/versions/node/v22.13.0/bin/pnpm run build
+│  exited (1)
+└────>
 ```
 
-### Develop
+## J'ai fait plusieurs tentatives différentes sans succès, je suis donc repartie de zéro et je bloque à ce stade.
 
-To develop all apps and packages, run the following command:
+## <a id="en">ENGLISH</a>
 
-```
-cd my-turborepo
-pnpm dev
-```
+# Sharing a Prisma Instance in a Turbo Monorepo (NestJS + Remix)
 
-### Remote Caching
+## Context
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+I have a TurboRepos monorepo with the following structure:
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- **apps/**
+  - **nestjs**: Backend application based on NestJS (CommonJS)
+  - **remix**: Frontend application based on Remix (ESM)
+- **packages/**
+  - **db**: Package dedicated to Prisma
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+The goal is to centralize the management of the Prisma schema and share a single `PrismaClient` instance between these two applications, despite their different module systems (CommonJS vs. ESM).
 
-```
-cd my-turborepo
-npx turbo login
-```
+## Issue
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+When integrating the `@repo/db` package into the NestJS app, I get the following error:
 
 ```
-npx turbo link
+┌ nest#build > cache miss, executing fe4d766427a3979b
+│
+│
+│ > nest@0.0.1 build /home/anonyme/project/turbo/apps/nest
+│ > nest build
+│
+│ src/main.ts:2:24 - error TS2307: Cannot find module '@repo/db' or its corresponding type declarations.
+│   There are types at '/home/anonyme/project/turbo/apps/nest/node_modules/@repo/db/src/index.ts', but this result could not be resolved
+│  under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+│
+│ 2 import { prisma } from '@repo/db';
+│                          ~~~~~~~~~~
+│
+│ Found 1 error(s).
+│
+│  ELIFECYCLE  Command failed with exit code 1.
+│ command finished with error: command (/home/anonyme/project/turbo/apps/nest) /home/anonyme/.nvm/versions/node/v22.13.0/bin/pnpm run build
+│  exited (1)
+└────>
 ```
 
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+I've tried several different approaches without success, so I'm starting from scratch and I'm stuck at this stage.
