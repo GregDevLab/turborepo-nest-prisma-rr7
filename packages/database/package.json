@@ -1,15 +1,16 @@
 {
   "name": "@repo/db",
   "version": "1.0.0",
-  "exports": {
-    ".": "./src/index.ts"
-  },
+  "main": "dist/main.ts",
+  "types": "dist/main.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy"
   },
   "devDependencies": {
+    "@types/node": "^22.13.4",
     "prisma": "^6.3.1"
   },
   "dependencies": {
