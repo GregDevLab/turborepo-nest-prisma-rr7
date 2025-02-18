@@ -1,7 +1,9 @@
-import { prisma } from "@repo/db";
+import { PrismaClient } from "@prisma/client";
 import type { LoaderFunction } from "react-router";
 import { Welcome } from "../welcome/welcome";
 import type { Route } from "./+types/home";
+
+const prisma = new PrismaClient();
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "New React Router App" },
