@@ -19,4 +19,13 @@ model User {
   createdAt DateTime @default(now())
   email     String   @unique
   name      String?
+  accounts  Account[]
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

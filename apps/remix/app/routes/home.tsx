@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@repo/db";
 import type { LoaderFunction } from "react-router";
 import { Welcome } from "../welcome/welcome";
 import type { Route } from "./+types/home";
-
-const prisma = new PrismaClient();
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "New React Router App" },
@@ -12,8 +10,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export const loader: LoaderFunction = async () => {
-  const user = await prisma.user.findFirst();
-  console.log("🚀 ~ constloader:LoaderFunction= ~ user:", user);
+  const account = await prisma.account.findFirst();
+  console.log("🚀 ~ constloader:LoaderFunction= ~ user:");
 };
 
 export default function Home() {
