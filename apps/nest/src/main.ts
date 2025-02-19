@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@repo/db';
 import { AppModule } from './app.module';
 
-const prisma = new PrismaClient();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const user = await prisma.user.findFirst();
+
+  const user = await prisma.account.findFirst();
   console.log('🚀 ~ bootstrap ~ user:', user);
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+bootstrap().catch((error: unknown) => {
+  if (error instanceof Error) {
+    console.error('Failed to start application:', error.message);
+  } else {
+    console.error('Failed to start application:', error);
+  }
+  process.exit(1);
+});
